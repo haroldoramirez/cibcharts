@@ -1,0 +1,67 @@
+<section class="content">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Temperatura do Gerador</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="grafico-linhas-enermac" class="chartjs-render-monitor" style="height: 270px; width: 788px;" width="788" height="270"></canvas>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Média e Desvio Padrão</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="grafico-scatter-enermac-media" class="chartjs-render-monitor" style="height: 270px; width: 788px;" width="788" height="270"></canvas>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Máxima / Mínima</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="grafico-scatter-enermac-maxima" class="chartjs-render-monitor" style="height: 270px; width: 788px;" width="788" height="270"></canvas>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <div class="col-md-2" style="float:right">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Características Estatísticas</h3>
+                    </div>
+                    <div class="box-body">
+                        <p><i class="glyphicon glyphicon-chevron-up"></i> Média: {{media | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-minus"></i> Mediana: {{mediana | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-chevron-down"></i> Máximo: {{maximoGrafico | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-minus"></i> Mínimo: {{minimo | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-minus"></i> DesvioPadrão: {{desvioPadrao | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-minus"></i> Assimetria: {{assimetria | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-minus"></i> Moda: {{moda | number : 2}}</p>
+                        <p><i class="glyphicon glyphicon-minus"></i> Amplitude: {{amplitude | number : 2}}</p>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

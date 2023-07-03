@@ -1,0 +1,151 @@
+@(currentPage: com.avaje.ebean.PagedList[Propriedade], currentSortBy: String, currentOrder: String, currentFilter: String)
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+
+    var sortBy = currentSortBy
+    var order = currentOrder
+
+    if(newSortBy != null) {
+        sortBy = newSortBy
+    if(currentSortBy == newSortBy) {
+        if(currentOrder == "asc") {
+            order = "desc"
+        } else {
+            order = "asc"
+        }
+    } else {
+        order = "asc"
+    }
+
+}
+
+// Generate the link
+    controllers.monitoramento.routes.PropriedadeController.telaLista(newPage, sortBy, order, currentFilter)
+
+}
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th rowspan="1" colspan="1" tabindex="0" class="@key.replace("../../../../../public","_") sorting @if(currentSortBy == key) @{if(currentOrder == "asc") "sorting_asc headercor" else "sorting_desc headercor"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@views.html.admin.main("Administração - Propriedades") {
+<div class="col-md-12">
+    <div class="page-header header-biogas">
+        <div class="btn-group btn-breadcrumb pull-right">
+            <a href="@routes.AdminController.painel()" class="btn btn-default"><i class="fa fa-home"></i></a>
+            <a class="btn btn-default">Monitoramento</a>
+            <a href="@controllers.monitoramento.routes.PropriedadeController.telaLista()" class="btn btn-default">Propriedades</a>
+            <a disabled class="btn btn-default">Lista</a>
+        </div>
+        <h1 class="font-style"><i class="fa fa-industry" aria-hidden="true"></i> Lista de Propriedades</h1>
+    </div>
+</div>
+<div class="col-sm-12">
+    @if(currentPage.getTotalRowCount == 0) {
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a type="button" href="@controllers.monitoramento.routes.PropriedadeController.telaNovo()" class="pull-right btn btn-success">Cadastrar</a>
+            <form action="@link(0, "nome")" method="GET">
+            <div class="input-group col-lg-3">
+                <input class="form-control" type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filtrar por nome">
+                <span class="input-group-btn">
+                    <input type="submit" id="searchsubmit" value="Filtrar" class="btn btn-primary">
+                    <a type="button" href="@controllers.monitoramento.routes.PropriedadeController.telaLista()" class="btn btn-default">Limpar</a>
+                </span>
+            </div><!-- /input-group -->
+            </form>
+        </div>
+    </div>
+    <div class="well well-sm">
+        <em>Nenhuma informação encontrada.</em>
+    </div>
+    } else {
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a type="button" href="@controllers.monitoramento.routes.PropriedadeController.telaNovo()" class="pull-right btn btn-success">Cadastrar</a>
+            <form action="@link(0, "nome")" method="GET">
+                <div class="input-group col-lg-3">
+                    <input class="form-control" type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filtrar por nome">
+                    <span class="input-group-btn">
+                            <input type="submit" id="searchsubmit" value="Filtrar" class="btn btn-primary">
+                            <a type="button" href="@controllers.monitoramento.routes.PropriedadeController.telaLista()" class="btn btn-default">Limpar</a>
+                    </span>
+                </div><!-- /input-group -->
+            </form>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table border="1" class="table table-bordered table-hover dataTable">
+                    <thead>
+                    <tr role="row">
+                        @header("nome", "Nome")
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for(propriedade <- currentPage.getList) {
+                        <tr>
+                            <td><a href="@controllers.monitoramento.routes.PropriedadeController.telaDetalhe(propriedade.getId)">@propriedade.getNome</a></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                        Visualizando @currentPage.getDisplayXtoYofZ(" até ", " total ")</div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="dataTables_paginate paging_simple_numbers pull-right">
+                        <ul class="pagination">
+                            @if(currentPage.hasPrev) {
+                            <li class="paginate_button previous">
+                                <a href="@link(currentPage.getPageIndex - 1, null)">Anterior</a>
+                            </li>
+                            } else {
+                            <li class="paginate_button previous disabled">
+                                <a>Anterior</a>
+                            </li>
+                            }
+                            @if(currentPage.hasNext) {
+                            <li class="paginate_button next">
+                                <a href="@link(currentPage.getPageIndex + 1, null)">Próximo</a>
+                            </li>
+                            } else {
+                            <li class="paginate_button next disabled">
+                                <a>Próximo</a>
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.btn-primary').attr('disabled',true);
+
+        $('#searchbox').keyup(function(){
+            if($(this).val().length !=0){
+                $('.btn-primary').attr('disabled', false);
+            }
+            else
+            {
+                $('.btn-primary').attr('disabled', true);
+            }
+        })
+    });
+</script>

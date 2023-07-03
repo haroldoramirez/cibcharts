@@ -1,0 +1,24 @@
+<!-- Main content -->
+<section class="content">
+
+    <!--Box Disponibilidade de Comunicacao por dia-->
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Disponibilidade de Comunicação por Dia em {{fullMonth}} de {{fullYear}}</h3>
+            <div class="btn-group input-group-sm pull-right">
+                <select ng-change="hasChangedMonth(selectMonths.value)" ng-model="selectMonths.value" ng-options="m for m in selectMonths.values"></select>
+                <select ng-change="hasChangedYear(selectYears.value)" ng-model="selectYears.value" ng-options="y for y in selectYears.values"></select>
+            </div>
+        </div>
+        <div class="box-body">
+            <span ng-show="loading">
+                Loading, please wait <img width="15" height="15" title="" alt="" src="assets/images/loading2.gif">
+            </span>
+            <div class="chart">
+                <canvas id="grafico-barras-propriedades" class="chartjs-render-monitor" style="height: 230px; width: 788px;" width="788" height="230"></canvas>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- /.content -->

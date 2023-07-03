@@ -1,0 +1,76 @@
+@import validators.monitoramento.BaseTotalFormData
+@(id: Long, objForm: play.data.Form[BaseTotalFormData])
+
+@import helper._
+@import templates.bootstrap._
+
+@views.html.admin.main("Administração - Editar Base Total") {
+
+    <div class="col-md-12">
+        <div class="page-header header-biogas">
+            <div class="btn-group btn-breadcrumb pull-right">
+                <a href="@routes.AdminController.painel()" class="btn btn-default"><i class="fa fa-home"></i></a>
+                <a class="btn btn-default">Monitoramento</a>
+                <a href="@controllers.monitoramento.routes.BaseTotalController.telaLista()" class="btn btn-default">Base Total</a>
+                <a disabled class="btn btn-default">Editar</a>
+            </div>
+            <h1 class="font-style"><i class="fa fa-tasks" aria-hidden="true"></i> Editar Indicador da Base Total</h1>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Informações</div>
+            <div class="panel-body">
+            @form(controllers.monitoramento.routes.BaseTotalController.editar(id), 'class -> "form-horizontal", 'id -> "objForm") {
+
+                @if(objForm.hasGlobalErrors) {
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <p class="alert alert-danger text-center">@objForm.globalError.message</p>
+                        </div>
+                    </div>
+                }
+
+                <p class="alert alert-warning text-center">Apenas para alterações de emergência!</p>
+
+                    @*indicador*@
+                @texto(objForm("indicador"),
+                    label = "Indicador:",
+                    placeholder = "Insira o indicador")
+
+                    @*input text*@
+                @texto(objForm("totalPing"),
+                    label = "Total de Pings:",
+                    placeholder = "Insira o total de pings")
+
+                @*input text*@
+                @texto(objForm("totalFalha"),
+                    label = "Total de falhas:",
+                    placeholder = "Insira o total de falhas")
+
+                @*botoes*@
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <button type="submit" id="btnEditar" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">Editar</button>
+                        <a href="@controllers.monitoramento.routes.BaseTotalController.telaLista()" class="btn btn-default" type="button">Cancelar</a>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+    window.onload = function() {
+        var form = document.getElementById("objForm");
+        form.elements[0].focus();
+
+        $('#btnEditar').on('click', function () {
+            var $btn = $(this).button('loading');
+        })
+    };
+</script>

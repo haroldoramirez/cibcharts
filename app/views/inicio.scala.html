@@ -1,0 +1,139 @@
+@()
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        @*Icones da aplicacao*@
+        <link rel="icon" sizes="192x192" href="@routes.Assets.versioned("images/cibiogasicon.png")">
+        <link rel="apple-touch-icon-precomposed" href="@routes.Assets.versioned("images/cibiogasicon.png")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/cibiogasicon.png")">
+
+        <title>Plataforma - CIBCharts</title>
+
+        @*Bootstrap core CSS*@
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap/4.3.1/dist/css/bootstrap.min.css")">
+
+        @*Custom CSS*@
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap/plataforma.css")">
+    </head>
+    <body>
+        <header>
+            <div class="navbar navbar-light bg-green box-shadow navbar-custom">
+                <div class="container-fluid container-fluid-nav d-flex justify-content-between">
+                    <a class="navbar-brand" href="@routes.Application.dashboard()"><img src="@routes.Assets.versioned("images/cibiogas-logosmall.jpg")" width="150" height="63" class="d-inline-block align-top" alt="Logo CIBiogás"></a>
+                </div>
+            </div>
+        </header>
+
+        <main role="main">
+            <section class="jumbotron text-center">
+                <div class="container">
+                    <h1 class="jumbotron-heading">Plataforma CIBCharts</h1>
+                    <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
+                </div>
+            </section>
+            <div class="album py-5 bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="card-columns">
+
+                                <!-- Card 4 -->
+                            <div class="card">
+                                <a target="_blank" href="http://agil.ernex.com.br/#!/">
+                                    <img class="card-img-top" src="@routes.Assets.versioned("images/agil.jpg")" alt="Card image" style="width:100%">
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title">AGIL</h4>
+                                    <p class="card-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                                </div>
+                            </div>
+
+                                <!-- Card 2 -->
+                            <div class="card">
+                                <a target="_blank" href="@routes.Application.dashboard()">
+                                    <img class="card-img-top" src="@routes.Assets.versioned("images/cibcharts.png")" alt="Card image" style="width:100%">
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title">Monitoramento de redes</h4>
+                                    <p class="card-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                                </div>
+                            </div>
+
+                                <!-- Card 5 -->
+                            <div class="card">
+                                <a target="_blank" href="https://biblioteca.cibiogas.org/#!/">
+                                    <img class="card-img-top" src="@routes.Assets.versioned("images/cib/elearning.jpg")" alt="Card image" style="width:100%">
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title">BIBLIOTECA</h4>
+                                    <p class="card-text">Essa é a Biblioteca Digital do Centro Internacional de Energias Renováveis-Biogás (CIBiogás), que reúne os principais artigos, livros, fotos e vídeos sobre pesquisas na área de energias renováveis, com enfoque em biogás.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-columns">
+                                <!-- Card 3 -->
+                            <div class="card">
+                                <a target="_blank" href="http://ernex.com.br/authentication#/signin">
+                                    <img class="card-img-top" src="@routes.Assets.versioned("images/ernex1.png")" alt="Card image" style="width:100%">
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title">Ernex</h4>
+                                    <p class="card-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                                </div>
+                            </div>
+
+                                <!-- Card 1 -->
+                            <div class="card">
+                                <a target="_blank" href="http://mapbiogas.cibiogas.org/">
+                                    <img class="card-img-top" src="@routes.Assets.versioned("images/mapbiogas1.png")" alt="Card image" style="width:100%">
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title">Biogasmap</h4>
+                                    <p class="card-text">O BiogasMap é uma ferramenta web que possibilita a visualização das unidades de produção e uso energético de biogás do Brasil em um mapa dinâmico público e online.</p>
+                                </div>
+                            </div>
+
+                                <!-- Card 6 -->
+                            <div class="card">
+                                <a target="_blank" href="https://cibiogas.org">
+                                    <img class="card-img-top" src="@routes.Assets.versioned("images/coffee.jpg")" alt="Card image" style="width:100%">
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title">Site CIBiogás</h4>
+                                    <p class="card-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="text-muted">
+            <div class="container">
+                <p class="float-right">
+                    <a href="">Back to top</a>
+                </p>
+                <strong>&copy; <script>document.write(new Date().getFullYear())</script> - Centro Internacional de Energias Renováveis - Biogás.</strong>
+            </div>
+        </footer>
+
+            <!-- Bootstrap core JavaScript
+    ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+        @*Jquery*@
+        <script src="@routes.Assets.versioned("bower_components/jquery/dist/jquery.min.js")" type="text/javascript"></script>
+        <script>window.jQuery || document.write('<script src="@routes.Assets.versioned("bower_components/jquery-slimscroll/jquery.slimscroll.min.js")"><\/script>')</script>
+        @*Bootstrap js*@
+        <script src="@routes.Assets.versioned("stylesheets/bootstrap/4.3.1/dist/js/bootstrap.min.js")" type="text/javascript"></script>
+        @*Holder js*@
+        <script src="@routes.Assets.versioned("bower_components/holderjs/holder.min.js")" type="text/javascript"></script>
+    </body>
+</html>

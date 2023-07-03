@@ -1,0 +1,39 @@
+@media(max-width:767px){
+    #srch {
+        margin-top: 22px;
+        margin-left: 10px;
+    }
+    .form-group pull-right {
+        width: 50%;
+    }
+}
+
+.form-group {
+    margin-bottom: 1px;
+}
+
+.input-agil {
+    height: 20px;
+    line-height: 1.5;
+    font-size: 12px;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.agil-select-ano {
+    width:75px;
+    font-size: 13px;
+}
+
+/*
+ * Row with equal height columns
+ * --------------------------------------------------
+ */
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+

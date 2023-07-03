@@ -1,0 +1,36 @@
+Ambiente de teste
+
+ALTER TABLE gestao_centro
+ADD COLUMN limite_superior float not null;
+
+ALTER TABLE gestao_centro
+ADD COLUMN limite_inferior float not null;
+
+ALTER TABLE indicador_mensal
+ADD COLUMN limite_superior float not null;
+
+ALTER TABLE indicador_mensal
+ADD COLUMN limite_inferior float not null;
+
+ALTER TABLE indicador_mensal ADD COLUMN nome_gestao_centro character varying(200) NOT NULL DEFAULT 'foo';
+
+Ambiente de Produção
+
+Primeiro passo é alterar a tabela adicionando uma nova coluna e seu tipo;
+
+ALTER TABLE gestao_centro ADD COLUMN limite_superior float;
+ALTER TABLE gestao_centro ADD COLUMN limite_inferior float;
+ALTER TABLE indicador_mensal ADD COLUMN limite_superior float;
+ALTER TABLE indicador_mensal ADD COLUMN limite_inferior float;
+
+Segundo passo é adicionar fazer a alteracao da coluna adicionada especificando que ela seja não nula. (Isso só funciona se as colunas já tem dados)
+ALTER TABLE gestao_centro ALTER COLUMN limite_superior SET NOT NULL;
+ALTER TABLE gestao_centro ALTER COLUMN limite_inferior SET NOT NULL;
+ALTER TABLE indicador_mensal ALTER COLUMN limite_superior SET NOT NULL;
+ALTER TABLE indicador_mensal ALTER COLUMN limite_inferior SET NOT NULL;
+
+
+Update dos ID
+
+UPDATE gestao_centro SET gestao_centro.id = 20190010055 WHERE gestao_centro.id = 2019000100015;
+

@@ -1,0 +1,418 @@
+@import validators.monitoramento.BasePingFormData
+@(id: Long, basePingForm: play.data.Form[BasePingFormData],
+propriedades:Map[String,Boolean],
+anos:Map[Integer,Boolean],
+meses:Map[Integer,Boolean],
+dias:Map[Integer,Boolean],
+propriedadesFiltro:Map[String,Boolean],
+pingsLast: List[BasePing],
+diasFiltrados: List[BaseCalculadaDia])
+
+@import helper._
+@import templates.bootstrap._
+
+@views.html.admin.main("Base de todos os Pings") {
+    <div class="col-md-12">
+        <div class="page-header header-biogas">
+            <div class="btn-group btn-breadcrumb pull-right">
+                <a href="@routes.AdminController.painel()" class="btn btn-default"><i class="fa fa-home"></i></a>
+                <a class="btn btn-default">Monitoramento</a>
+                <a href="@controllers.monitoramento.routes.BasePingController.telaLista()" class="btn btn-default">Base de todos os Pings</a>
+                <a disabled class="btn btn-default">Cadastro</a>
+            </div>
+            <h1 class="font-style"><i class="fa fa-files-o" aria-hidden="true"></i> Cadastro de Pings</h1>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class=""></i> Informações para Cálculos</h3>
+            </div>
+            <div class="panel-body">
+                @form(controllers.monitoramento.routes.BasePingController.inserir(), 'enctype -> "multipart/form-data", 'class -> "form-horizontal", 'id -> "basePingForm") {
+
+                        @*Caso o formulario tiver algum erro mostrar a mensagem global de erro*@
+                    @if(basePingForm.hasGlobalErrors) {
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                <p class="alert alert-danger text-center">@basePingForm.globalError.message</p>
+                            </div>
+                        </div>
+                    }
+
+                        @*selecao propriedade*@
+                    @selecaoPropriedade(basePingForm("propriedade"),
+                    label = "Propriedade:",
+                    optionMap = propriedades,
+                    isMultiple = false)
+
+                        @*arquivo cvs*@
+                    @arquivocsv(basePingForm("arquivo"),
+                    label = "Arquivo:")
+
+                        @*botoes*@
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-12">
+                            <button id="btnSalvar" type="submit" class="btn btn-success">Salvar</button>
+                            <a class="btn btn-default" type="button" href="@controllers.monitoramento.routes.BasePingController.telaLista()">Cancelar</a>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class=""></i> Validar Informações</h3>
+            </div>
+            <div class="panel-body">
+                @form(controllers.monitoramento.routes.CalculoController.atualizarDia(id), 'class -> "form-horizontal", 'id -> "basePingForm") {
+                    @*selecao propriedade*@
+                    @selecaoPropriedadeFiltro(basePingForm("propriedadesFiltro"),
+                        label = "Propriedade:",
+                        optionMap = propriedades,
+                        isMultiple = false)
+                    @*select anos*@
+                    @selecaodata(basePingForm("ano"),
+                        label = "Ano:",
+                        optionMap = anos,
+                        isMultiple = false)
+                    @*select meses*@
+                    @selecaodata(basePingForm("mes"),
+                        label = "Mês:",
+                        optionMap = meses,
+                        isMultiple = false)
+                    @*select dias*@
+                    @selecaodata(basePingForm("dia"),
+                        label = "Dia:",
+                        optionMap = dias,
+                        isMultiple = false)
+                    @*botoes*@
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-12">
+                            <button id="btnAtualizar" type="submit" class="btn btn-primary" disabled>Atualizar</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class=""></i> Pings atuais</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table border="1" class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr role="row">
+                                <th>Propriedade</th>
+                                <th>Ano</th>
+                                <th>Mês</th>
+                                <th>Dia</th>
+                                <th>Pings</th>
+                                <th>Falhas</th>
+                                <th>Indicador</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="listaObjetosPings"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class=""></i> Valores no banco de dados</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table border="1" class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr role="row">
+                                <th>Propriedade</th>
+                                <th>Ano</th>
+                                <th>Mês</th>
+                                <th>Dia</th>
+                                <th>Pings</th>
+                                <th>Falhas</th>
+                                <th>Indicador</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="listaObjetos"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+
+    let propriedade = "";
+    let ano = 0;
+    let mes = 0;
+    let dia = 0;
+
+    /*Lista auxiliar para os meses*/
+    let listaMeses = new Array();
+    listaMeses[1] = "Janeiro";
+    listaMeses[2] = "Fevereiro";
+    listaMeses[3] = "Março";
+    listaMeses[4] = "Abril";
+    listaMeses[5] = "Maio";
+    listaMeses[6] = "Junho";
+    listaMeses[7] = "Julho";
+    listaMeses[8] = "Agosto";
+    listaMeses[9] = "Setembro";
+    listaMeses[10] = "Outubro";
+    listaMeses[11] = "Novembro";
+    listaMeses[12] = "Dezembro";
+
+
+    $(function(){
+
+        /*On change quando selecionar a propriedade*/
+        $("#propriedadesFiltro").change(function() {
+
+            propriedade = $("#propriedadesFiltro").val();
+
+            /*limpa os dados antes de armazenar novos*/
+            $("#ano").html("");
+            $("#mes").html("");
+            $("#dia").html("");
+
+            optionVazio = "<option value="+"vazio"+">"+"-- Selecione --"+"</option>";
+
+            $("#ano").append(optionVazio);
+            $("#mes").append(optionVazio);
+            $("#dia").append(optionVazio);
+
+            /*Limpa a grid do dia que foi filtrado*/
+            $("#listaObjetos").html("");
+            $("#listaObjetosPings").html("");
+
+            /*Desative o botao*/
+            $("#btnAtualizar").prop("disabled", "disabled");
+
+            chamaAno(propriedade);
+
+        });
+
+        /*On change quando selecionar o ano*/
+        $("#ano").change(function() {
+
+            propriedade = $("#propriedadesFiltro").val();
+            ano = $("#ano").val();
+
+            /*limpa os dados antes de armazenar novos*/
+            $("#mes").html("");
+            $("#dia").html("");
+
+            optionVazio = "<option value="+"vazio"+">"+"-- Selecione --"+"</option>";
+
+            $("#mes").append(optionVazio);
+            $("#dia").append(optionVazio);
+
+            /*Limpa a grid do dia que foi filtrado*/
+            $("#listaObjetos").html("");
+            $("#listaObjetosPings").html("");
+
+            /*Desative o botao*/
+            $("#btnAtualizar").prop("disabled", "disabled");
+
+            if (propriedade != "" && ano != "vazio") {
+                chamaMes(propriedade, ano);
+            }
+
+        });
+
+        /*On change quando selecionar o mes*/
+        $("#mes").change(function() {
+
+            propriedade = $("#propriedadesFiltro").val();
+            ano = $("#ano").val();
+            mes = $("#mes").val();
+
+            /*limpa os dados antes de armazenar novos*/
+            $("#dia").html("");
+
+            optionVazio = "<option value="+"vazio"+">"+"-- Selecione --"+"</option>";
+
+            $("#dia").append(optionVazio);
+
+            /*Limpa a grid do dia que foi filtrado*/
+            $("#listaObjetos").html("");
+            $("#listaObjetosPings").html("");
+
+            /*Desative o botao*/
+            $("#btnAtualizar").prop("disabled", "disabled");
+
+            if (ano != "vazio" && mes != "vazio") {
+                chamaDia(propriedade, ano, mes);
+            }
+
+        });
+
+        /*On change quando selecionar o dia -> filtra por dia*/
+        $("#dia").change(function() {
+
+            propriedade = $("#propriedadesFiltro").val();
+            ano = $("#ano").val();
+            mes = $("#mes").val();
+            dia = $("#dia").val();
+
+            /*Limpa a grid do dia que foi filtrado*/
+            $("#listaObjetos").html("");
+            $("#listaObjetosPings").html("");
+
+            if (propriedade != "" && ano != "vazio" && mes != "vazio" && dia != "vazio") {
+                /*Ative o botao*/
+                $("#btnAtualizar").prop("disabled", false);
+
+                filtra(propriedade, ano, mes, dia);
+                filtraPings(propriedade, ano, mes, dia);
+            } else {
+                /*Desative o botao*/
+                $("#btnAtualizar").prop("disabled", "disabled");
+            }
+
+        });
+
+        /*Funcao chamada quando acontecer o change de propriedade*/
+        function chamaAno(propriedade) {
+
+            $.ajax({
+                url:"@controllers.monitoramento.routes.BaseCalculadaDiaController.listarAnos()",
+                data:"propriedade=" + propriedade,
+                dataType:"json",
+                success:function(a) {
+
+                    for (i = 0; i < a.length; i++) {
+                        option = "<option value="+a[i]+">"+a[i]+"</option>";
+                        $("#ano").append(option);
+                    }
+
+                }
+            });
+
+        }
+
+        /*Funcao chamada quando acontecer o change do campo ano*/
+        function chamaMes(propriedade, ano){
+
+            $.ajax({
+                url:"@controllers.monitoramento.routes.BaseCalculadaDiaController.listarMeses()",
+                data:"propriedade=" + propriedade + "&ano=" + ano,
+                dataType:"json",
+                success:function(m) {
+
+                    for (i = 0; i < m.length; i++) {
+                        option = "<option value="+m[i]+">"+listaMeses[m[i]]+"</option>";
+                        $("#mes").append(option);
+                    }
+
+                }
+            });
+
+        }
+
+        /*Funcao chamada quando acontecer o change do campo mes*/
+        function chamaDia(propriedade, ano, mes){
+
+            $.ajax({
+                url:"@controllers.monitoramento.routes.BaseCalculadaDiaController.listarDias()",
+                data:"propriedade=" + propriedade + "&ano=" + ano + "&mes=" + mes,
+                dataType:"json",
+                success:function(d) {
+
+                    for (i = 0; i < d.length; i++) {
+                        option = "<option value="+d[i]+">"+d[i]+"</option>";
+                        $("#dia").append(option);
+                    }
+
+                }
+            });
+
+        }
+
+        /*Funcao que filtra os pings por propriedade, ano, mes e dia*/
+        function filtraPings(propriedade, ano, mes, dia) {
+
+            $.ajax({
+                url:"@controllers.monitoramento.routes.BasePingController.filtrarPings()",
+                data:"propriedade=" + propriedade + "&ano=" + ano + "&mes=" + mes + "&dia=" + dia,
+                dataType:"json",
+                success:function(dados) {
+
+                    let objeto = "<td>"+dados.propriedade.nome+"</td>" +
+                            "<td>"+dados.ano+"</td> " +
+                            "<td>"+listaMeses[dados.mes]+"</td> " +
+                            "<td>"+dados.dia+"</td> " +
+                            "<td>"+dados.totalPing+"</td> " +
+                            "<td>"+dados.totalFalha+"</td> " +
+                            "<td>"+dados.indicador+"</td>";
+
+                    $("#listaObjetosPings").append(objeto);
+
+                    propriedadeFiltrada = dados.propriedade.nome;
+                    anoFiltrado = dados.ano;
+                    mesFiltrado = dados.mes;
+                    diaFiltrado = dados.dia;
+                    pings = dados.totalPing;
+                    falhas = dados.totalFalha;
+                    indicador = dados.indicador;
+
+                }
+            });
+        }
+
+        /*Funcao que filtra o dia salvo no banco*/
+        function filtra(propriedade, ano, mes, dia) {
+
+            $.ajax({
+                url:"@controllers.monitoramento.routes.BaseCalculadaDiaController.filtrarDias()",
+                data:"propriedade=" + propriedade + "&ano=" + ano + "&mes=" + mes + "&dia=" + dia,
+                dataType:"json",
+                success:function(dados) {
+
+                    let status = dados.status;
+
+                    if (status) {
+                        status = "<td class=\"text-success\">Calculado</td>";
+                    } else {
+                        status = "<td class=\"text-danger\">Não Calculado</td>";
+                    }
+
+                    let objeto = "<td>"+dados.propriedade.nome+"</td>" +
+                             "<td>"+dados.ano+"</td> " +
+                             "<td>"+listaMeses[dados.mes]+"</td> " +
+                             "<td>"+dados.dia+"</td> " +
+                             "<td>"+dados.totalPing+"</td> " +
+                             "<td>"+dados.totalFalha+"</td> " +
+                             "<td>"+dados.indicador+"</td>" +
+                             status;
+
+                    $("#listaObjetos").append(objeto);
+                }
+            });
+
+        }
+
+    });
+
+</script>

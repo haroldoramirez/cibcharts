@@ -1,0 +1,27 @@
+            //List<GestaoCentro> gestaoCentroReceita = new LinkedList<>();
+
+
+/*                for (GestaoCentro gestao : gestaoCentro) {
+
+                    if (gestao.getIndicador().getNomenclatura().contains("Receita")){
+                        gestaoCentroReceita.add(gestao);
+                    }
+
+                }*/
+
+
+
+                    public Result buscaPorPagina(int page) {
+                        try {
+
+                            //retorna o monitoramento uma pagina de 10 linhas de monitoramento em ordem descrecente
+                            return ok(Json.toJson(gestaoDB.find(Monitoramento.class)
+                                    .order()
+                                    .desc("id")
+                                    .findPagedList(page, 10).getList()));
+
+                        } catch (Exception e) {
+                            Logger.error(e.getMessage());
+                            return badRequest(Json.toJson(Messages.get("app.error")));
+                        }
+                    }

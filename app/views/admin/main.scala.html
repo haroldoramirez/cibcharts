@@ -1,0 +1,131 @@
+@(title: String)(content: Html)
+
+@usuario() = @{
+    Http.Context.current().args.get("usuario").asInstanceOf[Usuario]
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/cibiogasicon.png")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("bower_components/bootstrap/dist/css/bootstrap.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("bower_components/font-awesome/css/font-awesome.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap/tabelas.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap/main.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap/home.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap/docs.min.css")">
+    <title>@Messages("app.title")</title>
+</head>
+<body>
+    <div id="wrap">
+
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="@routes.AdminController.painel()">Adm @Messages("app.title")</a>
+                </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li @if(request.path.contains("/painel")){ class="active" }>
+                            <a href="@routes.AdminController.painel()"><span class="fa fa-home"></span> Início</a></li>
+                        <li @if(request.path.contains("/admin/monitoramento")){ class="active" } class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-industry"></span> Monitoramento <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">Home</li>
+                                <li>
+                                    <a><span class="fa fa-tachometer"></span> Dashboard</a></li>
+                                <li class="dropdown-header">Listas</li>
+                                <li @if(request.path.contains("/admin/monitoramento/propriedade")){ class="active" }>
+                                    <a href="@controllers.monitoramento.routes.PropriedadeController.telaLista()"><span class="fa fa-database"></span> Propriedades</a></li>
+                                <li @if(request.path.contains("/admin/monitoramento/basetotal")){ class="active" }>
+                                    <a href="@controllers.monitoramento.routes.BaseTotalController.telaLista()"><span class="fa fa-database"></span> Base Total</a></li>
+                                <li @if(request.path.contains("/admin/monitoramento/basecalculadadia")){ class="active" }>
+                                    <a href="@controllers.monitoramento.routes.BaseCalculadaDiaController.telaLista()"><span class="fa fa-database"></span> Base Calculada por Dia</a></li>
+                                <li @if(request.path.contains("/admin/monitoramento/baseping")){ class="active" }>
+                                    <a href="@controllers.monitoramento.routes.BasePingController.telaLista()"><span class="fa fa-database"></span> Base de Pings</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li></li>
+                        <li @if(request.path.contains("/admin/adicionais")){ class="active" } class="dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-cog" aria-hidden="true"></span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                @if(usuario.isAdmin) {
+                                    <li class="dropdown-header">Usuário</li>
+                                    <span class="label label-danger center-block">@usuario.getEmail</span>
+                                    <li role="separator" class="divider"></li>
+                                } else {
+                                    <li class="dropdown-header">Usuário</li>
+                                    <span class="label label-primary center-block">@usuario.getEmail</span>
+                                    <li role="separator" class="divider"></li>
+                                }
+                                <li><a href="@routes.Application.dashboard()"><span class="fa fa-sign-in"></span> Dashboard Monitoramento</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">Adicionais</li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">Sistema</li>
+                                @if(usuario().isAdmin) {
+                                    <li @if(request.path.contains("/usuario")) {class="active"}>
+                                        <a href="@routes.UsuarioController.telaLista()"><span class="fa fa-users"></span> Usuários</a>
+                                    </li>
+                                }
+                                <li @if(request.path.contains("/log")) {class="active" }>
+                                    <a href="@routes.LogController.telaLista()"><span class="fa fa-file"></span> Logs</a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">Autenticação</li>
+                                <li><a href="@routes.LoginController.logout"><span class="fa fa-sign-out"></span> Sair</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        @notificacoes()
+        @*Inicio do Conteudo da pagina*@
+        <div class="container-fluid">
+            <div class="row">
+                @content
+            </div>
+        </div>
+
+        <div id="push"></div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <p class="muted credit">
+                <div class="pull-right hidden-xs">
+                    @Messages("app.title") v1.0.0
+                </div>
+                <strong>&copy; <script>document.write(new Date().getFullYear())</script> - Centro Internacional de Energias Renováveis - Biogás.</strong> All rights reserved.
+            </p>
+        </div>
+    </div>
+
+    <script src="@routes.Assets.versioned("bower_components/jquery/dist/jquery.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("bower_components/bootstrap/dist/js/bootstrap.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("bower_components/moment/min/moment.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/docs.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/ie10-viewport-bug-workaround.js")" type="text/javascript"></script>
+</body>
+</html>

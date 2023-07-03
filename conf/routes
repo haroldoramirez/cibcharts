@@ -1,0 +1,123 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Rotas sem autenticacao ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Application
+GET     /                                                               controllers.Application.index()
+GET     /monitoramento                                                  controllers.Application.dashboard()
+GET     /idioma                                                         controllers.Application.mudaIdioma()
+GET     /messages.js                                                    controllers.Application.jsMessages()
+GET     /robots.txt                                                     controllers.Assets.at(path="/public", file="robots.txt")
+GET     /humans.txt                                                     controllers.Assets.at(path="/public", file="humans.txt")
+
+# Login Telas
+GET     /login                                                          controllers.LoginController.telaLogin()
+POST    /login                                                          controllers.LoginController.autenticar()
+
+# Reseta a senha
+GET     /reset/:token                                                       controllers.SenhaController.reset(token:String)
+POST    /reset/:token                                                       controllers.SenhaController.runReset(token:String)
+
+# Senha
+POST     /reset/senha/                                                            controllers.SenhaController.runPassword()
+POST     /usuario/reset/senha                                                     controllers.SenhaController.resetSenha()
+
+# Base Total
+GET     /monitoramento/basetotal/anos                                             controllers.monitoramento.BaseTotalController.listaAnos()
+GET     /monitoramento/basetotal/indicador/:ano                                   controllers.monitoramento.BaseTotalController.indicadorAno(ano:Integer)
+GET     /monitoramento/basetotal/propriedade/:propriedade/:ano                    controllers.monitoramento.BaseTotalController.buscarMesesPropriedades(propriedade: String, ano: Integer)
+GET     /monitoramento/basetotal/filtro/:ano/:mes                                 controllers.monitoramento.BaseTotalController.buscaPorAnoMes(ano: Integer, mes: Integer)
+
+# Base Calculada Dia
+GET     /monitoramento/basecalculadadia/propriedade/:propriedade/:ano/:mes        controllers.monitoramento.BaseCalculadaDiaController.buscarDiasPorMesPropriedades(propriedade: String, ano: Integer, mes: Integer)
+
+# Base Ping
+GET     /monitoramento/baseping/propriedade/:propriedade/:ano/:mes                controllers.monitoramento.BasePingController.buscarPingsPorMes(propriedade: String, ano: Integer, mes: Integer)
+
+# Rotas que precisam de autenticacao -------------------------------------------------------------------------------------------------------------------------------------------
+
+# Admin
+GET     /admin/painel                                                             controllers.AdminController.painel(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+
+#PDFs
+GET     /admin/pdf                                                                controllers.PdfController.create()
+
+# Login Servicos
+GET     /logout                                                                   controllers.LoginController.logout()
+
+# Adicionais Usuario telas
+GET     /admin/adicionais/usuario/novo/                                         controllers.UsuarioController.telaNovo()
+GET     /admin/adicionais/usuario/editar/:id                                    controllers.UsuarioController.telaEditar(id:Long)
+GET		/admin/adicionais/usuario/detalhe/:id				                    controllers.UsuarioController.telaDetalhe(id:Long)
+GET     /admin/adicionais/usuario/lista/todos                                   controllers.UsuarioController.telaLista(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+
+# Usuario Servicos
+GET     /current                                                                controllers.UsuarioController.autenticado()
+GET     /admin/adicionais/usuario/:id                                           controllers.UsuarioController.buscaPorId(id:Long)
+GET     /admin/adicionais/usuarios/filtro/:filtro                               controllers.UsuarioController.filtra(filtro:String)
+GET	    /admin/adicionais/usuario/:id/enviarToken		                        controllers.UsuarioController.enviarToken(id:Long)
+GET	    /admin/adicionais/usuario/:id/confirma		                            controllers.UsuarioController.confirmaAdmin(id:Long)
+GET	    /admin/adicionais/usuario/:id/bloqueia		                            controllers.UsuarioController.bloquear(id:Long)
+GET	    /admin/adicionais/usuario/:id/desbloqueia		                        controllers.UsuarioController.desbloquear(id:Long)
+POST    /admin/adicionais/usuario/editar/:id                                    controllers.UsuarioController.editar(id:Long)
+POST    /admin/adicionais/usuario                                               controllers.UsuarioController.inserirAdmin()
+POST	/admin/adicionais/usuario/:id/remover		                            controllers.UsuarioController.remover(id:Long)
+
+# Adicionais Logs
+GET     /admin/adicionais/log/:id/remover                                       controllers.LogController.remover(id:Long)
+GET		/admin/adicionais/log/detalhe/:id                                       controllers.LogController.telaDetalhe(id:Long)
+GET     /admin/adicionais/log/lista/todos                                       controllers.LogController.telaLista(p:Int ?= 0, s ?= "dataCadastro", o ?= "desc", f ?= "")
+
+# ROTAS APLICACAO MONITORAMENTO -------------------------------------------------------------------------------------------------------------------------------------------
+
+# Propriedade Telas
+GET     /admin/monitoramento/propriedades/novo/                                   controllers.monitoramento.PropriedadeController.telaNovo()
+GET		/admin/monitoramento/propriedades/detalhe/:id                             controllers.monitoramento.PropriedadeController.telaDetalhe(id:Long)
+GET     /admin/monitoramento/propriedades/editar/:id                              controllers.monitoramento.PropriedadeController.telaEditar(id:Long)
+GET     /admin/monitoramento/propriedades/lista/todos                             controllers.monitoramento.PropriedadeController.telaLista(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+
+# Propriedade Servicos
+POST    /admin/monitoramento/propriedade                                          controllers.monitoramento.PropriedadeController.inserir()
+POST	/admin/monitoramento/propriedade/:id/remover                              controllers.monitoramento.PropriedadeController.remover(id:Long)
+POST    /admin/monitoramento/propriedade/editar/:id                               controllers.monitoramento.PropriedadeController.editar(id:Long)
+
+# Adicionais Calculo
+GET     /admin/monitoramento/calculo/atualizar/                                   controllers.monitoramento.CalculoController.atualizarDia(id: Long ?= 0)
+
+# Base Total Telas
+GET     /admin/monitoramento/basetotal/editar/:id                                 controllers.monitoramento.BaseTotalController.telaEditar(id:Long)
+
+# Base Total
+GET     /admin/monitoramento/basetotal/lista/todos                                controllers.monitoramento.BaseTotalController.telaLista(p:Int ?= 0, s ?= "indicador", o ?= "asc", f ?= "")
+POST    /admin/monitoramento/basetotal/editar/:id                                 controllers.monitoramento.BaseTotalController.editar(id:Long)
+
+# Base Calculada Dia Telas
+GET     /admin/monitoramento/basecalculadadia/editar/:id                          controllers.monitoramento.BaseCalculadaDiaController.telaEditar(id:Long)
+
+# Base Calculada Dia
+GET     /admin/monitoramento/basecalculadadia/lista/todos                         controllers.monitoramento.BaseCalculadaDiaController.telaLista(p:Int ?= 0, s ?= "indicador", o ?= "asc", f ?= "")
+GET     /admin/monitoramento/basecalculadadia/anos/                               controllers.monitoramento.BaseCalculadaDiaController.listarAnos(propriedade: String ?= "")
+GET     /admin/monitoramento/basecalculadadia/anos/meses/                         controllers.monitoramento.BaseCalculadaDiaController.listarMeses(propriedade: String ?= "", ano: Integer ?= 0)
+GET     /admin/monitoramento/basecalculadadia/anos/meses/dias                     controllers.monitoramento.BaseCalculadaDiaController.listarDias(propriedade: String ?= "", ano: Integer ?= 0, mes: Integer ?= 0)
+GET     /admin/monitoramento/basecalculadadia/anos/meses/dias/filtro              controllers.monitoramento.BaseCalculadaDiaController.filtrarDias(propriedade: String ?= "", ano: Integer ?= 0, mes: Integer ?= 0, dia: Integer ?=0)
+POST    /admin/monitoramento/basecalculadadia/editar/:id                          controllers.monitoramento.BaseCalculadaDiaController.editar(id:Long)
+
+# Base Ping
+GET     /admin/monitoramento/baseping/lista/todos                                 controllers.monitoramento.BasePingController.telaLista(p:Int ?= 0, s ?= "socket_connection_test", o ?= "asc", f ?= "")
+GET     /admin/monitoramento/baseping/novo/                                       controllers.monitoramento.BasePingController.telaNovo(id: Long ?= 0)
+POST    /admin/monitoramento/baseping/                                            controllers.monitoramento.BasePingController.inserir(id: Long ?= 0)
+GET     /admin/monitoramento/baseping/anos/meses/dias/filtro                      controllers.monitoramento.BasePingController.filtrarPings(propriedade: String ?= "", ano: Integer ?= 0, mes: Integer ?= 0, dia: Integer ?=0)
+
+# ROTAS ENERMAC -------------------------------------------------------------------------------------------------------------------------------------------
+
+# Enermac Monitoramento
+GET     /enermac/monitoramento                                                    controllers.enermac.EnermacMonitoramentoController.buscaTodos()
+GET     /enermac/monitoramento/last                                               controllers.enermac.EnermacMonitoramentoController.last()
+GET     /enermac/estatistica/last                                                 controllers.enermac.EnermacMonitoramentoController.lastEstatistica()
+POST    /enermac/estatisticas                                                     controllers.enermac.EnermacMonitoramentoController.inserirEstatistica()
+GET     /enermac/estatisticas/lista/todos                                         controllers.enermac.EnermacMonitoramentoController.buscaTodasEstatisticas()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                                                             controllers.Assets.versioned(path="/public", file: Asset)

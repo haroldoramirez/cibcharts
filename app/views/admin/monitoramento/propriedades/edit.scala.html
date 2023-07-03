@@ -1,0 +1,59 @@
+@import validators.monitoramento.PropriedadeFormData
+@(id: Long, propriedadeForm: play.data.Form[PropriedadeFormData])
+
+@import helper._
+@import templates.bootstrap._
+
+@views.html.admin.main("Editar Propriedade") {
+<div class="col-md-12">
+    <div class="page-header header-biogas">
+        <div class="btn-group btn-breadcrumb pull-right">
+            <a href="@routes.AdminController.painel()" class="btn btn-default"><i class="fa fa-home"></i></a>
+            <a class="btn btn-default">Monitoramento</a>
+            <a href="@controllers.monitoramento.routes.PropriedadeController.telaLista()" class="btn btn-default">Propriedades</a>
+            <a disabled class="btn btn-default">Editar</a>
+        </div>
+        <h1 class="font-style"><i class="fa fa-industry" aria-hidden="true"></i> Editar Propriedade</h1>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">Informações</div>
+        <div class="panel-body">
+            @form(controllers.monitoramento.routes.PropriedadeController.editar(id), 'class -> "form-horizontal", 'id -> "propriedadeForm") {
+
+            @if(propriedadeForm.hasGlobalErrors) {
+            <div class="form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <p class="alert alert-danger text-center">@propriedadeForm.globalError.message</p>
+                </div>
+            </div>
+            }
+
+            @*nome*@
+            @texto(propriedadeForm("nome"),
+            label = "Nome:",
+            placeholder = "Insira o nome")
+
+            @*botoes*@
+            <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="col-md-9">
+                    <button id="btnSalvar" type="submit" class="btn btn-primary">Editar</button>
+                    <a href="@controllers.monitoramento.routes.PropriedadeController.telaLista()" class="btn btn-default" type="button">Cancelar</a>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+}
+
+<script type="text/javascript">
+    window.onload = function() {
+        var form = document.getElementById("propriedadeForm");
+        form.elements[0].focus();
+    };
+</script>

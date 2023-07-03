@@ -1,0 +1,17 @@
+# Systemd unit file for ernex - cibcharts - PLAY
+[Unit]
+Description=CIBCHARTS Application
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/rm -f /home/ernex/cibcharts/service/RUNNING_PID
+ExecStart=/home/ernex/cibcharts/cibcharts-1.0/bin/cibcharts -J-Xmx5120m -J-Xms3072m -J-server
+User=ernex
+TimeoutStopSec=20
+RestartSec=5
+Restart=on-failure
+LimitNOFILE=10240
+
+[Install]
+WantedBy=multi-user.target
